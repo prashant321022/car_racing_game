@@ -1,4 +1,4 @@
-﻿Public Class Form1
+Public Class Form1
     Dim speed As Integer
     Dim road(8) As PictureBox
     Dim score As Integer = 0
@@ -30,13 +30,16 @@
                 road(x).Top = -road(x).Height
             End If
         Next
-        If score > 10 And score < 15 Then
+        If score >= 0 And score < 8 Then
+            speed = 3
+
+        End If
+        If score > 8 And score < 13 Then
             speed = 5
 
 
-
         End If
-        If score > 15 And score < 20 Then
+        If score > 10 And score < 20 Then
             speed = 7
 
 
@@ -115,6 +118,15 @@
             leftside.Start()
 
         End If
+        If e.KeyCode = Keys.Up Then
+            upside.Start()
+
+        End If
+        If e.KeyCode = Keys.Down Then
+            downside.Start()
+
+        End If
+
     End Sub
 
     Private Sub leftside_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles leftside.Tick
@@ -128,10 +140,24 @@
             car.Left += 5
         End If
     End Sub
+    Private Sub downside_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles downside.Tick
+        If (car.Location.Y < 600) Then
+            car.Top += 5
+        End If
+    End Sub
+    Private Sub upside_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles upside.Tick
+        If (car.Location.Y > 0) Then
+            car.Top -= 5
+        End If
+    End Sub
+
 
     Private Sub Form1_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyUp
         rightside.Stop()
         leftside.Stop()
+        upside.Stop()
+        downside.Stop()
+
     End Sub
 
 
@@ -140,6 +166,7 @@
         racer1.Top += speed / 2
         If racer1.Top >= Me.Height Then
             score += 1
+
             scoretext.Text = "score" & score
             racer1.Top = -(CInt(Math.Ceiling(Rnd() * 150)) + racer1.Height)
             racer1.Left = CInt(Math.Ceiling(Rnd() * 30)) + 65
@@ -179,16 +206,13 @@
         End If
     End Sub
 
-    Private Sub replay_Click(sender As Object, e As EventArgs) Handles replaybutton.Click
+    Private Sub replaybutton_click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles replaybutton.Click
         score = 0
         Me.Controls.Clear()
         InitializeComponent()
         Form1_Load(e, e)
 
     End Sub
-
-
-
 End Class
 
 
